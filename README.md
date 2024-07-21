@@ -14,5 +14,4 @@
 
 ### Backend
 ##### [Backend Environment - 18/07/24](https://blog.naver.com/detol3953/223517584213)
-
-https://youtu.be/G4V4xO9wyD8?t=5835
+##### [Connect to MongoDB, user model and schema in the database - 21/07/24](https://blog.naver.com/detol3953/223520485121)
