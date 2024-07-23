@@ -20,4 +20,6 @@
 
 ##### [Implement signup, login, logout, followUnfollow functions - 22/07/24](https://blog.naver.com/detol3953/223521813746)
 
-https://youtu.be/G4V4xO9wyD8?t=9559
+##### [Update user, get user profile function - 23/07/24](https://blog.naver.com/detol3953/223522991786)
+
+
