@@ -5,7 +5,7 @@ const postSchema = mongoose.Schema(
   {
     postedBy: {
       // user ID from mongoDB
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       // reference from user ID
       ref: "User",
       required: true,
@@ -26,7 +26,7 @@ const postSchema = mongoose.Schema(
     replies: [
       {
         userId: {
-          type: mongoose.Types.ObjectId,
+          type: mongoose.Schema.Types.ObjectId,
           ref: "User",
           required: true,
         },
