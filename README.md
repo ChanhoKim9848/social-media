@@ -23,3 +23,5 @@
 ##### [Update user, get user profile function - 23/07/24](https://blog.naver.com/detol3953/223522991786)
 
 ##### [Create post function - 23/07/24](https://blog.naver.com/detol3953/223523191408)
+
+https://youtu.be/G4V4xO9wyD8?t=10918
