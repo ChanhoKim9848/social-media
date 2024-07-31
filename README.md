@@ -24,4 +24,8 @@
 
 ##### [Create post function - 23/07/24](https://blog.naver.com/detol3953/223523191408)
 
-https://youtu.be/G4V4xO9wyD8?t=10918
+##### [get post, delete post, like and unlike post function - 30/07/24](https://blog.naver.com/detol3953/223531207469)
+
+##### [reply to post, get feed post function - 31/07/24](https://blog.naver.com/detol3953/223532159352)
+
+https://youtu.be/G4V4xO9wyD8?t=12279

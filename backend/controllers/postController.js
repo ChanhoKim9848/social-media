@@ -5,7 +5,7 @@ import { v2 as cloudinary } from "cloudinary";
 // create post function
 const createPost = async (req, res) => {
   try {
-    // create post and save postedBy and text and img
+    // create post data and save it which has postedBy and text and img data into db
     const { postedBy, text } = req.body;
     let { img } = req.body;
 
@@ -54,6 +54,7 @@ const createPost = async (req, res) => {
 // get post function
 const getPost = async (req, res) => {
   try {
+    // get post from db
     const post = await Post.findById(req.params.id);
 
     // if post does not exist, error
@@ -91,15 +92,16 @@ const deletePost = async (req, res) => {
   }
 };
 
+// like and unlike post function
 const likeUnlikePost = async (req, res) => {
   try {
     // request user id from db
     const { id: postId } = req.params;
 
-    // get user id
+    // get user id which will like the post
     const userId = req.user._id;
 
-    // get post id
+    // get post id that will be liked
     const post = await Post.findById(postId);
 
     // if post does not exist, post not found
@@ -115,7 +117,6 @@ const likeUnlikePost = async (req, res) => {
       //  take user id from likes array and update post
       await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
       res.status(200).json({ message: "Post unliked successfully" });
-
     } else {
       // else like post
       //  push user id into likes array
@@ -128,4 +129,73 @@ const likeUnlikePost = async (req, res) => {
   }
 };
 
-export { createPost, getPost, deletePost, likeUnlikePost };
+// reply to post function
+const replyToPost = async (req, res) => {
+  try {
+    // data to reply on the post and save into db
+    const { text } = req.body;
+    const postId = req.params.id;
+    const userId = req.user._id;
+    const userProfilePic = req.user.profilePic;
+    const username = req.user.username;
+
+    // text does not exist, we cannot reply to post
+    if (!text) {
+      return res.status(400).json({ message: "Text field is required" });
+    }
+
+    // find post id to reply
+    const post = await Post.findById(postId);
+    // if post does not exist, error
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // reply
+    const reply = { userId, text, userProfilePic, username };
+
+    // push reply replies array of the post
+    post.replies.push(reply);
+    await post.save();
+
+    res.status(200).json({ message: "Reply added successfully", post });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// get feed post function
+const getFeedPost = async (req, res) => {
+  try {
+    // get user id from db and save into user
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    // if user does not exist, error
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // following accounts
+    const following = user.following;
+
+    // get posts from following users and display on the user's feed
+    // from latest to oldest
+    const feedPosts = await Post.find({ postedBy: { $in: following } }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({ feedPosts });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export {
+  createPost,
+  getPost,
+  deletePost,
+  likeUnlikePost,
+  replyToPost,
+  getFeedPost,
+};
