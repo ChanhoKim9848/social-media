@@ -28,4 +28,4 @@
 
 ##### [reply to post, get feed post function - 31/07/24](https://blog.naver.com/detol3953/223532159352)
 
-https://youtu.be/G4V4xO9wyD8?t=12279
+https://youtu.be/G4V4xO9wyD8?t=12453
