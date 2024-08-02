@@ -18,6 +18,6 @@ router.post("/logout", logoutUser);
 
 // protectRoute: middleware checks if user is not logged in, does update the profile
 router.post("/follow/:id", protectRoute, followUnFollowUser);
-router.post("/update/:id", protectRoute, updateUser);
+router.put("/update/:id", protectRoute, updateUser);
 
 export default router;
