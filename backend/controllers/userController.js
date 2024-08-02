@@ -83,10 +83,11 @@ const loginUser = async (req, res) => {
 
     // if user does not exist or password is not correct
     if (!user || !isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid username or password" });
+      return res.status(400).json({ error: "Invalid username or password" });
 
     generateTokenAndSetCookie(user._id, res);
 
+    // user data
     res.status(200).json({
       _id: user._id,
       name: user.name,

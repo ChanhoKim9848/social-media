@@ -28,4 +28,10 @@
 
 ##### [reply to post, get feed post function - 31/07/24](https://blog.naver.com/detol3953/223532159352)
 
-https://youtu.be/G4V4xO9wyD8?t=12453
+### Frontend & Backend
+
+##### [Login, Sign Up, Logout UI and functions - 01/08/24](https://blog.naver.com/detol3953/223533478996)
+
+##### [user login and logout data and local storage - 02/08/24](https://blog.naver.com/detol3953/223534464845)
+
+https://youtu.be/G4V4xO9wyD8?t=14459

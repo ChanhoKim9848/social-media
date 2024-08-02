@@ -17,6 +17,8 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useSetRecoilState } from "recoil";
 import authScreenAtom from "../atoms/authAtom";
+import useShowToast from "../hooks/useShowToast";
+import userAtom from "../atoms/userAtom";
 
 export default function LoginCard() {
   // password state
@@ -24,6 +26,51 @@ export default function LoginCard() {
 
   // authentication state, login or signup
   const setAuthScreen = useSetRecoilState(authScreenAtom);
+
+  // set user
+  const setUser = useSetRecoilState(userAtom);
+
+  // user login data
+  const [inputs, setInputs] = useState({
+    username: "",
+    password: "",
+  });
+
+  // toast message function call
+  const showToast = useShowToast();
+
+  // login functionality
+  const handleLogin = async () => {
+    try {
+      // login api call
+      const res = await fetch("/api/users/login", {
+        // POST method
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // JSON input data to string
+        body: JSON.stringify(inputs),
+      });
+
+      // get user data from login form
+      const data = await res.json();
+
+      // if data gives error or invalid, error
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+
+      console.log(data);
+      // save user data on the browser (local storage) and set user after login
+      localStorage.setItem("user-info", JSON.stringify(data));
+      setUser(data);
+      
+    } catch (error) {
+      showToast("Error", error, "error");
+    }
+  };
 
   return (
     // Sign up overall design
@@ -49,12 +96,32 @@ export default function LoginCard() {
           <Stack spacing={4}>
             <FormControl isRequired>
               <FormLabel>Username</FormLabel>
-              <Input type="text" />
+              <Input
+                // User name input
+                type="text"
+                value={inputs.username}
+                onChange={(e) =>
+                  setInputs((inputs) => ({
+                    ...inputs,
+                    username: e.target.value,
+                  }))
+                }
+              />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? "text" : "password"} />
+                <Input
+                  // user password input
+                  type={showPassword ? "text" : "password"}
+                  value={inputs.password}
+                  onChange={(e) =>
+                    setInputs((inputs) => ({
+                      ...inputs,
+                      password: e.target.value,
+                    }))
+                  }
+                />
                 <InputRightElement h={"full"}>
                   <Button
                     variant={"ghost"}
@@ -77,6 +144,8 @@ export default function LoginCard() {
                 _hover={{
                   bg: useColorModeValue("gray.700", "gray.800"),
                 }}
+                // Login Button Action
+                onClick={handleLogin}
               >
                 Login
               </Button>
@@ -84,7 +153,6 @@ export default function LoginCard() {
             <Stack pt={6}>
               <Text align={"center"}>
                 Do not have an account?{" "}
-
                 {/* If signup button is clicked in login state, it shows signup card */}
                 <Link
                   color={"blue.400"}

@@ -8,6 +8,7 @@ import AuthPage from "./pages/AuthPage";
 import { useRecoilValue } from "recoil";
 import userAtom from "./atoms/userAtom";
 import LogoutButton from "./components/LogoutButton";
+import UpdateProfilePage from "./pages/UpdateProfilePage";
 
 
 function App() {
@@ -27,6 +28,11 @@ function App() {
           path="/auth"
           // otherwise shows homepage
           element={!user ? <AuthPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/update"
+        //  if user logged in, update profile page otherwise the app goes to authentication page
+          element={user ? <UpdateProfilePage /> : <Navigate to="/auth" />}
         />
 
         <Route path="/:username" element={<UserPage />} />
