@@ -34,4 +34,4 @@
 
 ##### [user login and logout data and local storage - 02/08/24](https://blog.naver.com/detol3953/223534464845)
 
-https://youtu.be/G4V4xO9wyD8?t=14459
+https://youtu.be/G4V4xO9wyD8?t=15091

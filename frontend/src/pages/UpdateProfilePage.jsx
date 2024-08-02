@@ -8,73 +8,112 @@ import {
   Stack,
   useColorModeValue,
   Avatar,
-  AvatarBadge,
-  IconButton,
   Center,
 } from "@chakra-ui/react";
-import { SmallCloseIcon } from "@chakra-ui/icons";
+import { useRef, useState } from "react";
+import { useRecoilState } from "recoil";
+import userAtom from "../atoms/userAtom";
+import usePreviewImg from "../hooks/usePreviewImg";
 
 export default function UpdateProfilePage() {
+  // get user data from db
+  const [user, setUser] = useRecoilState(userAtom);
+
+  // data inputs to update user profile
+  const [inputs, setInputs] = useState({
+    name: user.name,
+    username: user.username,
+    email: user.email,
+    bio: user.bio,
+    password: "",
+  });
+
+  const fileRef = useRef(null);
+
+  // call handleImageChange function to check the image file to update
+  // imgUrl to render image file on the avatar
+  const { handleImageChange, imgUrl } = usePreviewImg();
+
   return (
-    <Flex
-      minH={"100vh"}
-      align={"center"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
+    <Flex align={"center"} justify={"center"} my={6}>
       <Stack
         spacing={4}
         w={"full"}
         maxW={"md"}
-        bg={useColorModeValue("white", "gray.700")}
+        bg={useColorModeValue("white", "gray.dark")}
         rounded={"xl"}
         boxShadow={"lg"}
         p={6}
-        my={12}
       >
         <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
           User Profile Edit
         </Heading>
-        <FormControl id="userName">
-          <FormLabel>User Icon</FormLabel>
+        <FormControl>
           <Stack direction={["column", "row"]} spacing={6}>
             <Center>
-              <Avatar size="xl" src="https://bit.ly/sage-adebayo">
-                <AvatarBadge
-                  as={IconButton}
-                  size="sm"
-                  rounded="full"
-                  top="-10px"
-                  colorScheme="red"
-                  aria-label="remove Image"
-                  icon={<SmallCloseIcon />}
-                />
-              </Avatar>
+              {/* if the file is image file, render the image file on the avatar */}
+              <Avatar size="xl" boxShadow={"md"} src={imgUrl || user.profilePic} />
             </Center>
             <Center w="full">
-              <Button w="full">Change Icon</Button>
+              {/* if Change Avatar button is clicked, user can choose picture file */}
+              <Button w="full" onClick={() => fileRef.current.click()}>
+                Change Avatar
+              </Button>
+              {/* if user choose picture file, handleImageChange function checks if the file is image type */}
+              <Input type="file" hidden ref={fileRef} onChange={handleImageChange} />
             </Center>
           </Stack>
         </FormControl>
-        <FormControl id="userName" isRequired>
-          <FormLabel>User name</FormLabel>
+        <FormControl isRequired>
+          {/* Full name update */}
+          <FormLabel>Full name</FormLabel>
           <Input
-            placeholder="UserName"
+            value={inputs.name}
+            onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
+            placeholder="John doe"
             _placeholder={{ color: "gray.500" }}
             type="text"
           />
         </FormControl>
-        <FormControl id="email" isRequired>
+        <FormControl isRequired>
+          {/* User name update */}
+          <FormLabel>User name</FormLabel>
+          <Input
+            placeholder="Jonedoe"
+            value={inputs.username}
+            onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
+            _placeholder={{ color: "gray.500" }}
+            type="text"
+          />
+        </FormControl>
+        <FormControl isRequired>
+          {/* Email address update */}
           <FormLabel>Email address</FormLabel>
           <Input
             placeholder="your-email@example.com"
+            value={inputs.email}
+            onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
+            _placeholder={{ color: "gray.500" }}
+            type="email"
+          />
+        </FormControl>
+        <FormControl isRequired>
+          {/* Biography update */}
+          <FormLabel>Bio</FormLabel>
+          <Input
+            placeholder="your bio."
+            value={inputs.bio}
+            onChange={(e) => setInputs({ ...inputs, bio: e.target.value })}
             _placeholder={{ color: "gray.500" }}
             type="email"
           />
         </FormControl>
         <FormControl id="password" isRequired>
+          {/* Password update */}
           <FormLabel>Password</FormLabel>
           <Input
+            value={inputs.password}
+            onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
             placeholder="password"
             _placeholder={{ color: "gray.500" }}
             type="password"
@@ -92,11 +131,11 @@ export default function UpdateProfilePage() {
             Cancel
           </Button>
           <Button
-            bg={"blue.400"}
+            bg={"green.400"}
             color={"white"}
             w="full"
             _hover={{
-              bg: "blue.500",
+              bg: "green.500",
             }}
           >
             Submit
