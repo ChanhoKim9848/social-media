@@ -38,4 +38,6 @@
 
 ##### [Edit User Profile function and UI - 03/08/24](https://blog.naver.com/detol3953/223535479797)
 
-https://youtu.be/G4V4xO9wyD8?t=16271
+##### [User feed and follow/unfollow functionality - 03/08/24](https://blog.naver.com/detol3953/223535553556)
+
+https://youtu.be/G4V4xO9wyD8?t=17914

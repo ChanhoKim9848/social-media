@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Flex,
   Link,
   Menu,
@@ -12,12 +13,60 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
+import { Link as RouterLink } from "react-router-dom";
+import useShowToast from "../hooks/useShowToast";
 
-const UserHeader = () => {
+const UserHeader = ({ user }) => {
+  // toast message
   const toast = useToast();
+  // toast message to show error
+  const showToast = useShowToast();
+  // logged in user
+  const currentUser = useRecoilValue(userAtom);
+
+  // following check. this is used to other user's profile and display follow/unfollow button
+  const [following, setFollowing] = useState(
+    user.followers.includes(currentUser._id)
+  );
+
+  // follow and unfollow handler
+  const handleFollowUnFollow = async () => {
+    try {
+      // call follow/unfollow api (POST request)
+      const res = await fetch(`/api/users/follow/${user._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // if data does not exist, error
+      const data = await res.json();
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+
+      // otherwise follow / unfollow other user
+      if (following) {
+        showToast("Success", `Unfollowed ${user.name}`, "success");
+        user.followers.pop(); // simulate removing user from followers array
+      } else {
+        showToast("Success", `Followed ${user.name}`, "success");
+        user.followers.push(currentUser._id); // simulate adding to followers array
+      }
+      setFollowing(!following);
+
+      console.log(data);
+    } catch (error) {
+      showToast("Error", error, "error");
+    }
+  };
 
   // Copy URL function
   const copyURL = () => {
@@ -40,10 +89,10 @@ const UserHeader = () => {
         {/* User Profile and Feed Box */}
         <Box>
           <Text fontSize={"2xl"} fontWeight={"bold"}>
-            Mark Zuckerberg
+            {user.name}
           </Text>
           <Flex gap={2} alignItems={"center"}>
-            <Text fontSize={"sm"}>markzuckerberg </Text>
+            <Text fontSize={"sm"}>{user.username}</Text>
             <Text
               fontSize={"xs"}
               bg={"gray.dark"}
@@ -57,22 +106,53 @@ const UserHeader = () => {
         </Box>
         <Box>
           {/* Responsive Profile Image */}
-          <Avatar
-            name="Mark Zuckerberg"
-            src="/zuck-avatar.png"
-            
-            // Responsive medium size to x large size
-            size={{
-              base: "md",
-              md: "xl",
-            }}
-          />
+
+          {/* user avatar */}
+          {user.profilePic && (
+            <Avatar
+              name={user.name}
+              src={user.profilePic}
+              // Responsive medium size to x large size
+              size={{
+                base: "md",
+                md: "xl",
+              }}
+            />
+          )}
+          {/* if user does not exist, it displays broken profile picture */}
+          {!user.profilePic && (
+            <Avatar
+              name={user.name}
+              src={"https://bit.ly/broken-link"}
+              // Responsive medium size to x large size
+              size={{
+                base: "md",
+                md: "xl",
+              }}
+            />
+          )}
         </Box>
       </Flex>
-      <Text>Co-found, executive chairman and CEO of Meta platform</Text>
+
+      <Text>{user.bio}</Text>
+
+      {/* update profile button */}
+      {currentUser._id === user._id && (
+        // Link is used as RouterLink for client side routing
+        <Link as={RouterLink} to="/update">
+          <Button size={"sm"}>Update Profile</Button>
+        </Link>
+      )}
+      {/* when current user is seeing other user's profile */}
+      {currentUser._id !== user._id && (
+        <Button size={"sm"} onClick={handleFollowUnFollow}>
+          {/* if user is already following, button is unfollow otheriwse follow */}
+          {following ? "Unfollow" : "Follow"}
+        </Button>
+      )}
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
-          <Text color={"gray.light"}>3.2K followers</Text>
+          <Text color={"gray.light"}>{user.followers.length} followers</Text>
           <Box w="1" h="1" bg={"gray.light"} borderRadius={"full"}></Box>
           <Link color={"gray.light"}>Instagram.com</Link>
         </Flex>
