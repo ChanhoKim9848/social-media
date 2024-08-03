@@ -1,6 +1,6 @@
 # Social Media - Threads Clone
 
-### React, Chakra UI
+### React, Chakra UI, Cloudinary, Recoil atoms, Chakra UI toast, MongoDB
 
 # Project Blog
 
@@ -35,5 +35,7 @@
 ##### [user login and logout data and local storage - 02/08/24](https://blog.naver.com/detol3953/223534464845)
 
 ##### [update user profile UI and function - 02/08/24](https://blog.naver.com/detol3953/223534735776)
+
+##### [Edit User Profile function and UI - 03/08/24](https://blog.naver.com/detol3953/223535479797)
 
 https://youtu.be/G4V4xO9wyD8?t=16271

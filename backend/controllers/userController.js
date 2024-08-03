@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 import { v2 as cloudinary } from "cloudinary";
 
-
 const getUserProfile = async (req, res) => {
   const { username } = req.params;
   try {
@@ -56,7 +55,7 @@ const signupUser = async (req, res) => {
         email: newUser.email,
         username: newUser.username,
         bio: newUser.bio,
-        profilePic : newUser.profilePic,
+        profilePic: newUser.profilePic,
       });
 
       // Sign Up Fail
@@ -171,7 +170,7 @@ const updateUser = async (req, res) => {
   const { name, email, username, password, bio } = req.body;
 
   // if user updated profile picture and app sends the file and upload on cloudinary
-  let {profilePic} = req.body; 
+  let { profilePic } = req.body;
 
   const userId = req.user._id;
   try {
@@ -195,11 +194,17 @@ const updateUser = async (req, res) => {
       user.password = hashedPassword;
     }
 
-    // upload profile picture on cloudinary
-    if(profilePic){
-      const uploadedResponse = await cloudinary.uploader.upload(profilePic)
-      profilePic= uploadedResponse.secure_url;
-      
+    // upload updated profile picture on cloudinary
+    if (profilePic) {
+      // if user already has a profile picture, delete old one
+      if (user.profilePic) {
+        await cloudinary.uploader.destroy(
+          user.profilePic.split("/").pop().split(".")[0]
+        );
+      }
+      // upload new profile picture and update profile
+      const uploadedResponse = await cloudinary.uploader.upload(profilePic);
+      profilePic = uploadedResponse.secure_url;
     }
 
 
@@ -212,7 +217,12 @@ const updateUser = async (req, res) => {
 
     // update and save changes
     user = await user.save();
-    res.status(200).json({ message: "Profile updated successfully", user });
+
+
+    // password should be null in response
+    user.password = null;
+
+    res.status(200).json( user );
   } catch (err) {
     res.status(500).json({ error: err.message });
     console.log("Error in updateUser ", err.message);

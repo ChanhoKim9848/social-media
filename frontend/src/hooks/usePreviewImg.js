@@ -13,7 +13,7 @@ const usePreviewImg = () => {
 
     // checks if the file is image type
     if (file && file.type.startsWith("image/")) {
-
+      
       // read the file
       const reader = new FileReader();
 
@@ -28,8 +28,6 @@ const usePreviewImg = () => {
       setImgUrl(null);
     }
   };
-  console.log(imgUrl);
-  
   return { handleImageChange, imgUrl };
 };
 
