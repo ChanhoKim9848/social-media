@@ -40,4 +40,13 @@
 
 ##### [User feed and follow/unfollow functionality - 03/08/24](https://blog.naver.com/detol3953/223535553556)
 
-https://youtu.be/G4V4xO9wyD8?t=17914
+##### [Creating user post function, loading action - 05/08/24](https://blog.naver.com/detol3953/223537646299)
+
+https://youtu.be/G4V4xO9wyD8?t=19860
+
+### Trouble Shooting
+
+// to parse JSON data in the req.body
+if image or file created by user is too big, 
+server does not allow user to save. so we set the limit to 50mb
+app.use(express.json({limit:"50mb"}));

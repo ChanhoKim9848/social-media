@@ -22,7 +22,7 @@ cloudinary.config({
 });
 
 // to parse JSON data in the req.body
-app.use(express.json());
+app.use(express.json({limit:"50mb"}));
 // url encoded used to parse form data req.body
 // extended: even if the request body has some nested object,
 // it is still able to parse

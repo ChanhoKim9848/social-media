@@ -29,6 +29,9 @@ const UserHeader = ({ user }) => {
   // logged in user
   const currentUser = useRecoilValue(userAtom);
 
+  // updating state after certain action is executed
+  const [updating, setUpdating] = useState(false);
+
   // following check. this is used to other user's profile and display follow/unfollow button
   const [following, setFollowing] = useState(
     user.followers.includes(currentUser._id)
@@ -37,6 +40,17 @@ const UserHeader = ({ user }) => {
   // follow and unfollow handler
   const handleFollowUnFollow = async () => {
     try {
+      if (!currentUser) {
+        showToast("Error", "Please login to follow", "error");
+        return;
+      }
+
+      // if user try to click any button during updating, it does not do anything
+      if(updating) return;
+
+      // update user
+      setUpdating(true);
+
       // call follow/unfollow api (POST request)
       const res = await fetch(`/api/users/follow/${user._id}`, {
         method: "POST",
@@ -65,6 +79,9 @@ const UserHeader = ({ user }) => {
       console.log(data);
     } catch (error) {
       showToast("Error", error, "error");
+    } finally {
+      //  updating state becomes false after update
+      setUpdating(false);
     }
   };
 
@@ -145,7 +162,9 @@ const UserHeader = ({ user }) => {
       )}
       {/* when current user is seeing other user's profile */}
       {currentUser._id !== user._id && (
-        <Button size={"sm"} onClick={handleFollowUnFollow}>
+
+        // when button is clicked and updating state, buttons shows loading sign
+        <Button size={"sm"} onClick={handleFollowUnFollow} isLoading={updating}>
           {/* if user is already following, button is unfollow otheriwse follow */}
           {following ? "Unfollow" : "Follow"}
         </Button>

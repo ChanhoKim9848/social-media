@@ -30,6 +30,9 @@ export default function LoginCard() {
   // set user
   const setUser = useSetRecoilState(userAtom);
 
+  // check page loading state
+  const [loading, setLoading] = useState(false);
+
   // user login data
   const [inputs, setInputs] = useState({
     username: "",
@@ -41,6 +44,8 @@ export default function LoginCard() {
 
   // login functionality
   const handleLogin = async () => {
+    // if page is loading, set loading state true
+    setLoading(true);
     try {
       // login api call
       const res = await fetch("/api/users/login", {
@@ -61,14 +66,14 @@ export default function LoginCard() {
         showToast("Error", data.error, "error");
         return;
       }
-
-      console.log(data);
       // save user data on the browser (local storage) and set user after login
       localStorage.setItem("user-info", JSON.stringify(data));
       setUser(data);
-      
     } catch (error) {
       showToast("Error", error, "error");
+    } finally {
+      // loading state false
+      setLoading(false);
     }
   };
 
@@ -146,6 +151,8 @@ export default function LoginCard() {
                 }}
                 // Login Button Action
                 onClick={handleLogin}
+                // when page is loading, show loading sign
+                isLoading = {loading}
               >
                 Login
               </Button>

@@ -32,6 +32,11 @@ export default function UpdateProfilePage() {
   // file type variable
   const fileRef = useRef(null);
 
+  // updating state
+  const [updating,setUpdating] = useState(false);
+
+
+  // call toast message function
   const showToast = useShowToast();
 
   // call handleImageChange function to check the image file to update
@@ -41,6 +46,11 @@ export default function UpdateProfilePage() {
   // form submit to update profile page
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // // if user try to click any button during updating, it does not do anything
+    if(updating) return;
+    // set the state to updating
+    setUpdating(true);
 
     try {
       const res = await fetch(`/api/users/update/${user._id}`, {
@@ -64,6 +74,9 @@ export default function UpdateProfilePage() {
       localStorage.setItem("user-info", JSON.stringify(data));
     } catch (error) {
       showToast("Error", error, "error");
+    } finally{
+      // updating state becomes false after update
+      setUpdating(false)
     }
   };
 
@@ -185,6 +198,8 @@ export default function UpdateProfilePage() {
                 bg: "green.500",
               }}
               type="submit"
+              // show loading sign, when it is updating
+              isLoading={updating}
             >
               Submit
             </Button>
