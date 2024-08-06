@@ -42,7 +42,7 @@
 
 ##### [Creating user post function, loading action - 05/08/24](https://blog.naver.com/detol3953/223537646299)
 
-https://youtu.be/G4V4xO9wyD8?t=19860
+https://youtu.be/G4V4xO9wyD8?t=21395
 
 ### Trouble Shooting
 

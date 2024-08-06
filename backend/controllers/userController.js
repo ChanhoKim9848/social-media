@@ -2,14 +2,35 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 
+//  get user profile function
+//  this function used to see other users profile page
 const getUserProfile = async (req, res) => {
-  const { username } = req.params;
+
+  // we will fetch user profile either with username or userId
+  // query is either username or userId
+  const { query } = req.params;
+
   try {
-    const user = await User.findOne({ username })
-      .select("-password")
-      .select("-updatedAt");
-    if (!user) return res.status(404).json({ error: "User not found" });
+    // find user data from the database by either userId or username
+    let user;
+
+    // if query is userId
+    if (mongoose.Types.ObjectId.isValid(query)) {
+      user = await User.findOne({ _id: query })
+        // get other user data without their passwords and updated date
+        .select("-password")
+        .select("-updatedAt");
+    } else {
+      // if query is username
+      user = await User.findOne({ username: query })
+        // get other user data without their passwords and updated date
+        .select("-password")
+        .select("-updatedAt");
+    }
+    // if user is not found, error
+      if (!user) return res.status(404).json({ error: "User not found" });
 
     res.status(200).json(user);
   } catch (err) {
@@ -207,7 +228,6 @@ const updateUser = async (req, res) => {
       profilePic = uploadedResponse.secure_url;
     }
 
-
     // user profile data
     user.name = name || user.name;
     user.email = email || user.email;
@@ -218,11 +238,10 @@ const updateUser = async (req, res) => {
     // update and save changes
     user = await user.save();
 
-
     // password should be null in response
     user.password = null;
 
-    res.status(200).json( user );
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
     console.log("Error in updateUser ", err.message);

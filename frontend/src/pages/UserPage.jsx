@@ -44,18 +44,18 @@ const UserPage = () => {
     getUser();
   }, [username, showToast]);
 
-  // if user does not exist and page is loading, 
+  // if user does not exist and page is loading,
   // page shows loading sign
   if (!user && loading) {
     return (
       <Flex justifyContent={"center"}>
-        <Spinner size="xl" />;
+        <Spinner size="xl" />
       </Flex>
-    )
+    );
   }
   // if user try to go user page that does not exist and
   // it is not loading page, return user not found
-  if (!user && !loading) return <h1>User not found</h1>;
+  if (!user && !loading) return <h1>User not found</h1>
 
   // if user does not eixst, return null
   if (!user) return null;
