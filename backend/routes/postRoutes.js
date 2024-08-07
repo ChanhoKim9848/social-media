@@ -16,7 +16,9 @@ router.get("/feed",protectRoute, getFeedPost);
 router.get("/:id", getPost);
 router.post("/create", protectRoute, createPost);
 router.delete("/:id", protectRoute, deletePost);
-router.post("/like/:id", protectRoute, likeUnlikePost);
-router.post("/reply/:id", protectRoute, replyToPost);
+
+// method is as put : updating fields inside likes and replies arrays
+router.put("/like/:id", protectRoute, likeUnlikePost);
+router.put("/reply/:id", protectRoute, replyToPost);
 
 export default router;

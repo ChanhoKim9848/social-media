@@ -12,7 +12,7 @@ const HomePage = () => {
   const showToast = useShowToast();
 
   useEffect(() => {
-    // display my feed with other user posts whom I am following
+    // get Feed posts function that displays my feed with other user posts whom I am following  
     const getFeedPosts = async () => {
       setLoading(true);
       try {

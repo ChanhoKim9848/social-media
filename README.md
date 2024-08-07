@@ -42,6 +42,9 @@
 
 ##### [Creating user post function, loading action - 05/08/24](https://blog.naver.com/detol3953/223537646299)
 
+##### [User page feed with following users posts, User profile page - 06/08/24](https://blog.naver.com/detol3953/223538771418)
+
+
 https://youtu.be/G4V4xO9wyD8?t=21395
 
 ### Trouble Shooting

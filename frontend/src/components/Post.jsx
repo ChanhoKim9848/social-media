@@ -121,8 +121,13 @@ const Post = ({ post, postedBy }) => {
               <Image src="/verified.png" w={4} h={4} ml={1} />
             </Flex>
             <Flex gap={4} alignItems={"center"}>
-              <Text fontSize={"xs"} width={36} textAlign={"right"} color={"gray.light"}>
-                {formatDistanceToNow(new Date(post.createdAt))} ago 
+              <Text
+                fontSize={"xs"}
+                width={36}
+                textAlign={"right"}
+                color={"gray.light"}
+              >
+                {formatDistanceToNow(new Date(post.createdAt))} ago
               </Text>
 
               {/* Three Dots to edit post */}
@@ -142,18 +147,7 @@ const Post = ({ post, postedBy }) => {
           )}
           <Flex gap={3} my={1}>
             {/* heart icon action */}
-            <Actions liked={liked} setLiked={setLiked} />
-          </Flex>
-          <Flex gap={2} alignItems={"center"}>
-            <Text color={"gray.light"} fontSize="sm">
-              {/* post replies are array, so return length of the array */}
-              {post.replies.length} replies
-            </Text>
-            <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
-            <Text color={"gray.light"} fontSize="sm">
-              {/* post likes are array, so return length of the array */}
-              {post.likes.length} likes
-            </Text>
+            <Actions post={post} />
           </Flex>
         </Flex>
       </Flex>
