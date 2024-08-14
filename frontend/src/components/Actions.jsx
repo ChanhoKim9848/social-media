@@ -61,7 +61,6 @@ const Actions = ({ post: post_ }) => {
       showToast("Error", error.message, "error");
     }
   };
-
   return (
     <Flex flexDirection="column">
       <Flex gap={3} my={2} onClick={(e) => e.preventDefault()}>
@@ -163,5 +162,4 @@ const Actions = ({ post: post_ }) => {
     </Flex>
   );
 };
-
 export default Actions;

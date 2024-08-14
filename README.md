@@ -45,7 +45,7 @@
 ##### [User page feed with following users posts, User profile page - 06/08/24](https://blog.naver.com/detol3953/223538771418)
 
 
-https://youtu.be/G4V4xO9wyD8?t=21395
+https://youtu.be/G4V4xO9wyD8?t=21875
 
 ### Trouble Shooting
 
