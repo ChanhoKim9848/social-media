@@ -44,12 +44,16 @@
 
 ##### [User page feed with following users posts, User profile page - 06/08/24](https://blog.naver.com/detol3953/223538771418)
 
+##### [Post like and reply buttons functionality - 16/08/24](https://blog.naver.com/detol3953/223550283981)
 
-https://youtu.be/G4V4xO9wyD8?t=21875
+https://youtu.be/G4V4xO9wyD8?t=22538
 
 ### Trouble Shooting
 
 // to parse JSON data in the req.body
+
 if image or file created by user is too big, 
+
 server does not allow user to save. so we set the limit to 50mb
+
 app.use(express.json({limit:"50mb"}));
