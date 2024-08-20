@@ -34,7 +34,7 @@ const UserHeader = ({ user }) => {
 
   // following check. this is used to other user's profile and display follow/unfollow button
   const [following, setFollowing] = useState(
-    user.followers.includes(currentUser._id)
+    user.followers.includes(currentUser?._id)
   );
 
   // follow and unfollow handler
@@ -72,7 +72,8 @@ const UserHeader = ({ user }) => {
         user.followers.pop(); // simulate removing user from followers array
       } else {
         showToast("Success", `Followed ${user.name}`, "success");
-        user.followers.push(currentUser._id); // simulate adding to followers array
+        // currentUser is empty, it does not give error
+        user.followers.push(currentUser?._id); // simulate adding to followers array
       }
       setFollowing(!following);
 
@@ -154,14 +155,14 @@ const UserHeader = ({ user }) => {
       <Text>{user.bio}</Text>
 
       {/* update profile button */}
-      {currentUser._id === user._id && (
+      {currentUser?._id === user._id && (
         // Link is used as RouterLink for client side routing
         <Link as={RouterLink} to="/update">
           <Button size={"sm"}>Update Profile</Button>
         </Link>
       )}
       {/* when current user is seeing other user's profile */}
-      {currentUser._id !== user._id && (
+      {currentUser?._id !== user._id && (
 
         // when button is clicked and updating state, buttons shows loading sign
         <Button size={"sm"} onClick={handleFollowUnFollow} isLoading={updating}>

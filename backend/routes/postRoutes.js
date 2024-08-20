@@ -5,15 +5,17 @@ import {
   getPost,
   likeUnlikePost,
   replyToPost,
-  getFeedPost,
+  getUserPosts,
+  getFeedPosts,
 } from "../controllers/postController.js";
 import protectRoute from "../middlewares/protectRoute.js";
 
 const router = express.Router();
 
 // protectRoute, the person who is only logged in can use api
-router.get("/feed",protectRoute, getFeedPost);
+router.get("/feed",protectRoute, getFeedPosts);
 router.get("/:id", getPost);
+router.get("/user/:username", getUserPosts);
 router.post("/create", protectRoute, createPost);
 router.delete("/:id", protectRoute, deletePost);
 

@@ -46,7 +46,9 @@
 
 ##### [Post like and reply buttons functionality - 16/08/24](https://blog.naver.com/detol3953/223550283981)
 
-https://youtu.be/G4V4xO9wyD8?t=22538
+https://youtu.be/G4V4xO9wyD8?t=21319
+
+https://youtu.be/G4V4xO9wyD8?t=24248
 
 ### Trouble Shooting
 

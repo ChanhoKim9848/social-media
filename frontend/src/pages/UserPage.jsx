@@ -1,47 +1,40 @@
 import { useEffect, useState } from "react";
 import UserHeader from "../components/UserHeader";
-import UserPost from "../components/UserPost";
 import { useParams } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 import { Flex, Spinner } from "@chakra-ui/react";
+import Post from "../components/Post";
+import useGetUserProfile from "../hooks/useGetUserProfile";
 
 // user's page function, feed, following users, posts...
 const UserPage = () => {
-  // user state checks if user is logged in or not
-  const [user, setUser] = useState(null);
+  // user and loading
+  const { user, loading } = useGetUserProfile();
   // get username to get user data from database
   const { username } = useParams();
   // toast message to show error or success message
   const showToast = useShowToast();
-
-  // loading state. to check if page is loading.
-  const [loading, setLoading] = useState(true);
+  //  states of the posts
+  const [posts, setPosts] = useState([]);
+  // loading state, to check posts are loading from the api call
+  const [fetchingPosts, setFetchingPosts] = useState(false);
 
   useEffect(() => {
-    // if user is logged in, app shows the user feed and profile
-    const getUser = async () => {
-      try {
-        // get user data from the api call
-        const res = await fetch(`/api/users/profile/${username}`);
-        // get user data from the database
-        const data = await res.json();
 
-        // if no data, error
-        if (data.error) {
-          showToast("Error", data.error, "error");
-          return;
-        }
-        // otherwise, state is set to the user
-        setUser(data);
+    const getPosts = async () => {
+      setFetchingPosts(true);
+      try {
+        const res = await fetch(`/api/posts/user/${username}`);
+        const data = await res.json();
+        setPosts(data);
       } catch (error) {
-        showToast("Error", error, "error");
+        showToast("Error", error.message, "error");
+        setPosts([]);
       } finally {
-        // loading state becomes false
-        setLoading(false);
+        setFetchingPosts(false);
       }
     };
-
-    getUser();
+    getPosts();
   }, [username, showToast]);
 
   // if user does not exist and page is loading,
@@ -55,7 +48,7 @@ const UserPage = () => {
   }
   // if user try to go user page that does not exist and
   // it is not loading page, return user not found
-  if (!user && !loading) return <h1>User not found</h1>
+  if (!user && !loading) return <h1>User not found</h1>;
 
   // if user does not eixst, return null
   if (!user) return null;
@@ -63,24 +56,19 @@ const UserPage = () => {
   return (
     <>
       <UserHeader user={user} />
-      <UserPost
-        likes={1200}
-        replies={481}
-        postImg="/post1.png"
-        postTitle="Let's talk about thread"
-      />
-      <UserPost
-        likes={123}
-        replies={213}
-        postImg="/post2.png"
-        postTitle="NIcueeee"
-      />
-      <UserPost
-        likes={567}
-        replies={412}
-        postImg="/post3.png"
-        postTitle="ez pz"
-      />
+
+      {/* if user does not have any post */}
+      {!fetchingPosts && posts.length === 0 && (
+        <h1>User does not have any post.</h1>
+      )}
+      {fetchingPosts && (
+        <Flex justifyContent={"center"} my={12}>
+          <Spinner size={"xl"} />
+        </Flex>
+      )}
+      {posts.map((post) => (
+        <Post key={post._id} post={post} postedBy={post.postedBy} />
+      ))}
     </>
   );
 };

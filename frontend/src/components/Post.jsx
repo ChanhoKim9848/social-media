@@ -3,16 +3,18 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Actions from "./Actions";
 import useShowToast from "../hooks/useShowToast";
-
+import { DeleteIcon } from "@chakra-ui/icons";
 import { formatDistanceToNow } from "date-fns";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 // function that gets data from each post
 
 const Post = ({ post, postedBy }) => {
-  const [liked, setLiked] = useState(false);
   const [user, setUser] = useState(null);
   const showToast = useShowToast();
   const navigate = useNavigate();
+  const currentUser = useRecoilValue(userAtom);
 
   useEffect(() => {
     // functions gets user data from a post
@@ -22,7 +24,6 @@ const Post = ({ post, postedBy }) => {
         // api call user
         const res = await fetch("/api/users/profile/" + postedBy);
         const data = await res.json();
-        console.log(data);
 
         // if user does not eixst, error
         if (data.error) {
@@ -37,6 +38,29 @@ const Post = ({ post, postedBy }) => {
     };
     getUser();
   }, [postedBy, showToast]);
+
+  // delete post function with button
+  const handleDeletePost = async (e) => {
+    try {
+      e.preventDefault();
+      // confirmation message if user confirms to delete
+      if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+      // method delete api call
+      const res = await fetch(`/api/posts/${post._id}`, {
+        method: "DELETE",
+      });
+      const data = res.json();
+
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+      showToast("Success", "Post deleted", "success");
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    }
+  };
 
   // if function did not get user data, no post will be shown
   if (!user) return null;
@@ -130,7 +154,11 @@ const Post = ({ post, postedBy }) => {
                 {formatDistanceToNow(new Date(post.createdAt))} ago
               </Text>
 
-              {/* Three Dots to edit post */}
+              {/* logout, question mark prevents user getting error,
+               when current user is undefined */}
+              {currentUser?._id === user._id && (
+                <DeleteIcon size={20} onClick={handleDeletePost} />
+              )}
             </Flex>
           </Flex>
           {/* elements and layout of user post section */}
