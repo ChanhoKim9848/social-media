@@ -5,6 +5,8 @@ import useShowToast from "../hooks/useShowToast";
 import { Flex, Spinner } from "@chakra-ui/react";
 import Post from "../components/Post";
 import useGetUserProfile from "../hooks/useGetUserProfile";
+import { useRecoilState } from "recoil";
+import postsAtom from "../atoms/postsAtom";
 
 // user's page function, feed, following users, posts...
 const UserPage = () => {
@@ -15,12 +17,11 @@ const UserPage = () => {
   // toast message to show error or success message
   const showToast = useShowToast();
   //  states of the posts
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useRecoilState(postsAtom)
   // loading state, to check posts are loading from the api call
   const [fetchingPosts, setFetchingPosts] = useState(false);
 
   useEffect(() => {
-
     const getPosts = async () => {
       setFetchingPosts(true);
       try {
@@ -35,7 +36,7 @@ const UserPage = () => {
       }
     };
     getPosts();
-  }, [username, showToast]);
+  }, [username, showToast, setPosts]);
 
   // if user does not exist and page is loading,
   // page shows loading sign
@@ -67,7 +68,11 @@ const UserPage = () => {
         </Flex>
       )}
       {posts.map((post) => (
-        <Post key={post._id} post={post} postedBy={post.postedBy} />
+        <Post
+          key={post._id}
+          post={post}
+          postedBy={post.postedBy}
+        />
       ))}
     </>
   );

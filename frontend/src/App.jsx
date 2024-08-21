@@ -14,7 +14,6 @@ import CreatePost from "./components/CreatePost";
 function App() {
   // user login data from recoil authentication
   const user = useRecoilValue(userAtom);
-  console.log(user);
   return (
     <Container maxW="620px">
       <Header />
@@ -34,12 +33,22 @@ function App() {
           //  if user logged in, update profile page otherwise the app goes to authentication page
           element={user ? <UpdateProfilePage /> : <Navigate to="/auth" />}
         />
-        <Route path="/:username" element={<UserPage />} />
+        <Route path="/:username" element={user ? 
+          (
+            <>
+            {/* if user logged in, user page and create post button are displayed */}
+            <UserPage />
+            <CreatePost/>
+            </>
+          ):(
+            // else, only show user page
+            <UserPage />
+          )
+        } />
         <Route path="/:username/post/:pid" element={<PostPage />} />
       </Routes>
 
       {user && <LogoutButton />}
-      {user && <CreatePost/>}
     </Container>
   );
 }

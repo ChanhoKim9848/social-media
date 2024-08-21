@@ -21,13 +21,14 @@ import {
 import React, { useRef, useState } from "react";
 import usePreviewImg from "../hooks/usePreviewImg";
 import { BsFillImageFill } from "react-icons/bs";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
+import postsAtom from "../atoms/postsAtom";
 
 // maximum text characters in post
 const MAX_CHAR = 500;
-    
+
 const CreatePost = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -51,8 +52,11 @@ const CreatePost = () => {
   //   toast message
   const showToast = useShowToast();
 
-  //   loading state
+  //  loading state
   const [loading, setLoading] = useState(false);
+
+  // set post states
+  const [posts, setPosts] = useRecoilState(postsAtom);
 
   //   get text input value from post
   const handleTextChange = (e) => {
@@ -102,6 +106,7 @@ const CreatePost = () => {
       }
       // post success
       showToast("Success", "Post created successfully", "success");
+      setPosts([data, ...posts])
       onClose();
       setPostText("");
       setImgUrl("");
@@ -117,13 +122,14 @@ const CreatePost = () => {
       <Button
         position={"fixed"}
         bottom={10}
-        right={10}
-        leftIcon={<AddIcon />}
+        right={5}
         bg={useColorModeValue("gray.300", "gray.dark")}
         onClick={onOpen}
+        size={{ base: "sm", sm: "md" }}
       >
-        Post
+        <AddIcon />
       </Button>
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
 
