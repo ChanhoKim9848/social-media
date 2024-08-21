@@ -1,42 +1,31 @@
 import { Avatar, Divider, Flex, Text } from "@chakra-ui/react";
-import { useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
-import Actions from "./Actions";
 
-const Comment = ({ userAvatar, createdAt, comment, username, likes }) => {
-  const [liked, setLiked] = useState(false);
+// user comment components
+
+const Comment = ({ reply, lastReply }) => {
   return (
     <>
       <Flex gap={4} py={2} my={2} w={"full"}>
         {/* User profile image in Comment */}
-        <Avatar src={userAvatar} />
+        <Avatar src={reply.userProfilePic} />
         <Flex gap={1} w={"full"} flexDirection={"column"}>
           <Flex
             w={"full"}
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            {/* Username */}
+            {/* Username of the comment*/}
             <Text fontSize="sm" fontWeight="bold">
-              {username}
+              {reply.username}
             </Text>
-            <Flex gap={2} alignItems={"center"}>
-              <Text fontSize={"sm"} color={"gray.light"}>
-                {createdAt}
-              </Text>
-              <BsThreeDots />
-            </Flex>
           </Flex>
-          {/* User Comment */}
-          <Text>{comment}</Text>
-          <Actions liked={liked} setLiked={setLiked} />
-          <Text fontSize={"sm"} color={"gray.light"}>
-            { likes  + (liked ? 1 : 0)} likes
-          </Text>
+
+          {/* User Comment of the comment */}
+          <Text>{reply.text}</Text>
         </Flex>
       </Flex>
-
-      <Divider />
+      {/* if comment is the last one, it does not have a divider (horizontal bar) underneath */}
+      {!lastReply ? <Divider /> : null}
     </>
   );
 };

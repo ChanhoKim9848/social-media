@@ -46,9 +46,10 @@
 
 ##### [Post like and reply buttons functionality - 16/08/24](https://blog.naver.com/detol3953/223550283981)
 
-https://youtu.be/G4V4xO9wyD8?t=21319
+##### [Delete post, reply post functions, design of user page and posts - 21/08/24](https://blog.naver.com/detol3953/223555891498)
 
-https://youtu.be/G4V4xO9wyD8?t=24248
+
+https://youtu.be/G4V4xO9wyD8?t=24625
 
 ### Trouble Shooting
 
