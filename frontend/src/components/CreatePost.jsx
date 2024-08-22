@@ -25,6 +25,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
+import { useParams } from "react-router-dom";
 
 // maximum text characters in post
 const MAX_CHAR = 500;
@@ -57,6 +58,9 @@ const CreatePost = () => {
 
   // set post states
   const [posts, setPosts] = useRecoilState(postsAtom);
+
+  // username
+  const {username} = useParams();
 
   //   get text input value from post
   const handleTextChange = (e) => {
@@ -106,10 +110,20 @@ const CreatePost = () => {
       }
       // post success
       showToast("Success", "Post created successfully", "success");
-      setPosts([data, ...posts])
+
+      // if user and user on profile page are same (users on their own pages)
+      // user can add new posts (user cannot post on other user's profile)
+      if (username === user.username) {
+        setPosts([data, ...posts]);
+      }
+
+      // close adding post
       onClose();
+
+      // empty text and img after create a post
       setPostText("");
       setImgUrl("");
+
     } catch (error) {
       showToast("Error", error, "error");
     } finally {

@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import Post from "../models/postModel.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 import { v2 as cloudinary } from "cloudinary";
@@ -7,7 +8,6 @@ import mongoose from "mongoose";
 //  get user profile function
 //  this function used to see other users profile page
 const getUserProfile = async (req, res) => {
-
   // we will fetch user profile either with username or userId
   // query is either username or userId
   const { query } = req.params;
@@ -30,7 +30,7 @@ const getUserProfile = async (req, res) => {
         .select("-updatedAt");
     }
     // if user is not found, error
-      if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     res.status(200).json(user);
   } catch (err) {
@@ -237,6 +237,21 @@ const updateUser = async (req, res) => {
 
     // update and save changes
     user = await user.save();
+
+    // update username and profile picture on post, comments etc...
+    // after update user profile
+    await Post.updateMany(
+      // find all posts that this user replied from the database and mongoose and
+      // update username and user profile picture fields
+      { "replies.userId": userId },
+      {
+        $set: {
+          "replies.$[reply].username": user.username,
+          "replies.$[reply].userProfilePic": user.profilePic,
+        },
+      },
+      { arrayFilters: [{ "reply.userId": userId }] }
+    );
 
     // password should be null in response
     user.password = null;

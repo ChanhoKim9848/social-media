@@ -48,8 +48,9 @@
 
 ##### [Delete post, reply post functions, design of user page and posts - 21/08/24](https://blog.naver.com/detol3953/223555891498)
 
+##### [Update username and profile picture after edit profile - 22/08/24](https://blog.naver.com/detol3953/223557067342)
 
-https://youtu.be/G4V4xO9wyD8?t=25722
+https://youtu.be/G4V4xO9wyD8?t=26798
 
 ### Trouble Shooting
 

@@ -35,11 +35,13 @@ const PostPage = () => {
   // moves to certain url (update)
   const navigate = useNavigate();
 
+  // current post that we are looking at (first element from posts array)
   const currentPost = posts[0];
 
   useEffect(() => {
     // posts are shown when user page is loaded
     const getPost = async () => {
+      setPosts([]);
       try {
         const res = await fetch(`/api/posts/${pid}`);
         const data = await res.json();
@@ -160,7 +162,10 @@ const PostPage = () => {
           key={reply._id}
           reply={reply}
           // if comment is the last one, it does not have a divider (horizontal bar) underneath
-          lastReply={reply._id === currentPost.replies[currentPost.replies.length - 1]._id}
+          lastReply={
+            reply._id ===
+            currentPost.replies[currentPost.replies.length - 1]._id
+          }
         />
       ))}
     </>

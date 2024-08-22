@@ -78,7 +78,7 @@ export default function LoginCard() {
   };
 
   return (
-    // Sign up overall design
+    // login overall design
     <Flex align={"center"} justify={"center"}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
